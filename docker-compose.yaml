@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:17.0
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: $DATABASE_NAME
+      POSTGRES_USER: $DATABASE_USERNAME
+      POSTGRES_PASSWORD: $DATABASE_PASSWORD
+      TZ: "Europe/Moscow"
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d app -h db -p 5432 -U app" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
